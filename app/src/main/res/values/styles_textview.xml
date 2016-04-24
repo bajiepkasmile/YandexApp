@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="default_text">
+        <item name="android:textSize">@dimen/font_small</item>
+        <item name="android:textColor">@color/dark_gray</item>
+    </style>
+    
+    <style name="link_text">
+        <item name="android:textSize">@dimen/font_normal</item>
+        <item name="android:textColor">@color/primary_dark</item>
+        <item name="android:clickable">true</item>
+    </style>
+
+</resources>

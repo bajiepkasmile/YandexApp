@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_artists_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical"
+            app:layoutManager="LinearLayoutManager"/>
+
+        <LinearLayout
+            android:id="@+id/ll_updating_bar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/updating_layout_size"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:background="@color/transparent_purple">
+
+            <ProgressBar
+                android:layout_width="@dimen/progress_bar_size"
+                android:layout_height="@dimen/progress_bar_size"
+                android:layout_marginRight="@dimen/spacing_small"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/updating"
+                android:textSize="@dimen/font_normal"
+                android:textColor="@color/white"/>
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/spacing_huge"
+        android:layout_gravity="bottom|end"
+        android:src="@mipmap/ic_update"
+        app:backgroundTint="@color/purple"
+        app:layout_behavior="com.domain.yandexapp.utils.animation.FabHidingBehavior"/>
+
+</android.support.design.widget.CoordinatorLayout>
