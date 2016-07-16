@@ -8,4 +8,6 @@ public interface ArtistDetailsMvpPresenter extends MvpPresenter<ArtistDetailsMvp
 
     void onLinkClick();
 
+    void onHomeButtonPressed();
+
 }

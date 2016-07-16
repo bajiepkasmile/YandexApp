@@ -5,7 +5,11 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -93,16 +97,24 @@ public class ArtistDetailsFragment extends Fragment implements ArtistDetailsMvpV
     }
 
     @Override
-    public void showArtistDetails(Artist artist) {
-        if (ivCover != null) {
-            Picasso.with(getActivity())
-                    .load(artist.getBigCoverUrl())
-                    .memoryPolicy(MemoryPolicy.NO_STORE)
-                    .placeholder(R.drawable.cover_placeholder_big)
-                    .into(ivCover);
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            mvpPresenter.onHomeButtonPressed();
+            return true;
         }
 
-        if (toolbarLayout != null) toolbarLayout.setTitle(artist.getName());
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void showArtistDetails(Artist artist) {
+        Picasso.with(getActivity())
+                .load(artist.getBigCoverUrl())
+                .memoryPolicy(MemoryPolicy.NO_STORE)
+                .placeholder(R.drawable.cover_placeholder_big)
+                .into(ivCover);
+
+        toolbarLayout.setTitle(artist.getName());
 
         if (artist.getGenres().length != 0) {
             tvGenres.setText(Converter.genresToString(artist.getGenres()));
@@ -128,13 +140,22 @@ public class ArtistDetailsFragment extends Fragment implements ArtistDetailsMvpV
         navigator.navigateToBrowser(link);
     }
 
+    @Override
+    public void navigateToArtistsList() {
+        navigator.navigateToArtistsList();
+    }
+
     private void initViews(View view) {
-        toolbarLayout = (CollapsingToolbarLayout) getActivity().findViewById(R.id.toolbar_layout);
-        ivCover = (ImageView) getActivity().findViewById(R.id.iv_big_cover);
+        toolbarLayout = (CollapsingToolbarLayout) view.findViewById(R.id.toolbar_layout);
+        ivCover = (ImageView) view.findViewById(R.id.iv_big_cover);
         tvGenres = (TextView) view.findViewById(R.id.tv_genres);
         tvStatistics = (TextView) view.findViewById(R.id.tv_statistics);
         tvLink = (TextView) view.findViewById(R.id.tv_link);
         tvDescription = (TextView) view.findViewById(R.id.tv_description);
+
+        setupToolbar(view);
+        setHasOptionsMenu(true);
+        displayHomeButton(view);
 
         tvLink.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -142,6 +163,18 @@ public class ArtistDetailsFragment extends Fragment implements ArtistDetailsMvpV
                 mvpPresenter.onLinkClick();
             }
         });
+    }
+
+    private void setupToolbar(View view) {
+        Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+    }
+
+    private void displayHomeButton(View view) {
+        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     private int getPosition() {

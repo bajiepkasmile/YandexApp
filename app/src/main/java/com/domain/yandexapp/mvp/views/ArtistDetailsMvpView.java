@@ -8,4 +8,6 @@ public interface ArtistDetailsMvpView {
 
     void navigateToBrowser(String link);
 
+    void navigateToArtistsList();
+
 }

@@ -4,4 +4,6 @@ public interface ArtistDetailsNavigator {
 
     void navigateToBrowser(String link);
 
+    void navigateToArtistsList();
+
 }

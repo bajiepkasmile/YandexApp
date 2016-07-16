@@ -5,7 +5,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -151,12 +153,20 @@ public class ArtistsListFragment extends Fragment implements ArtistsListMvpView,
         fab = (FloatingActionButton) view.findViewById(R.id.fab);
         updatingBar = (LinearLayout) view.findViewById(R.id.ll_updating_bar);
 
+        setupToolbar(view);
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mvpPresenter.updateArtistsList();
             }
         });
+    }
+
+    private void setupToolbar(View view) {
+        Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+        getActivity().setTitle(R.string.artists);
     }
 
 }

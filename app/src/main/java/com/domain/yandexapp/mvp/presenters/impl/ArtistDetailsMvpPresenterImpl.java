@@ -41,4 +41,9 @@ public class ArtistDetailsMvpPresenterImpl extends BaseMvpPresenter<ArtistDetail
         mvpView.navigateToBrowser(artist.getLink());
     }
 
+    @Override
+    public void onHomeButtonPressed() {
+        mvpView.navigateToArtistsList();
+    }
+
 }

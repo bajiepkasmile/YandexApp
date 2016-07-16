@@ -3,7 +3,7 @@ package com.domain.yandexapp.di.components;
 import com.domain.yandexapp.di.modules.AppModule;
 import com.domain.yandexapp.di.modules.InteractorsModule;
 import com.domain.yandexapp.di.modules.PresentersModule;
-import com.domain.yandexapp.ui.activities.SplashActivity;
+import com.domain.yandexapp.ui.activities.MainActivity;
 import com.domain.yandexapp.ui.fragments.ArtistDetailsFragment;
 import com.domain.yandexapp.ui.fragments.ArtistsListFragment;
 
@@ -25,6 +25,6 @@ public interface AppComponent {
 
     void inject(ArtistDetailsFragment fragment);
 
-    void inject(SplashActivity activity);
+    void inject(MainActivity activity);
 
 }
