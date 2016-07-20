@@ -5,9 +5,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +15,7 @@ import android.widget.Toast;
 
 import com.domain.yandexapp.App;
 import com.domain.yandexapp.R;
+import com.domain.yandexapp.ui.activities.MainActivity;
 import com.domain.yandexapp.utils.ToastManager;
 import com.domain.yandexapp.model.Artist;
 import com.domain.yandexapp.mvp.presenters.ArtistsListMvpPresenter;
@@ -153,7 +153,11 @@ public class ArtistsListFragment extends Fragment implements ArtistsListMvpView,
         fab = (FloatingActionButton) view.findViewById(R.id.fab);
         updatingBar = (LinearLayout) view.findViewById(R.id.ll_updating_bar);
 
-        setupToolbar(view);
+        getActivity().setTitle(R.string.artists);
+        ActionBar actionBar = ((MainActivity) getActivity()).getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(false);
+        }
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -161,12 +165,6 @@ public class ArtistsListFragment extends Fragment implements ArtistsListMvpView,
                 mvpPresenter.updateArtistsList();
             }
         });
-    }
-
-    private void setupToolbar(View view) {
-        Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
-        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-        getActivity().setTitle(R.string.artists);
     }
 
 }

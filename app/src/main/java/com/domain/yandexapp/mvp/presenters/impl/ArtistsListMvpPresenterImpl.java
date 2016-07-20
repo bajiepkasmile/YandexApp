@@ -16,6 +16,7 @@ public class ArtistsListMvpPresenterImpl extends BaseMvpPresenter<ArtistsListMvp
     private DataManager dataManager;
     private NetworkUtil networkUtil;
     private UpdateArtistsInteractor updateInteractor;
+    private static boolean updated = false;
 
     public ArtistsListMvpPresenterImpl(DataManager dataManager,
                                        NetworkUtil networkUtil,
@@ -27,8 +28,10 @@ public class ArtistsListMvpPresenterImpl extends BaseMvpPresenter<ArtistsListMvp
 
     @Override
     public void onCreateMvpView(Bundle savedInstanceState) {
-        if (savedInstanceState == null) {
+        //if (savedInstanceState == null) {
+        if (!updated) {
             updateArtistsList();
+            updated = true;
         }
     }
 

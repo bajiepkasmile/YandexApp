@@ -6,10 +6,30 @@
     <string name="biography">Биография</string>
     <string name="updating">Обновление</string>
 
+    <!--About-->
+    <string name="about">О программе</string>
+    <string name="about.text">Вступительное задание для проекта \"Мобилизация\"</string>
+
+    <!--Feedback-->
+    <string name="feedback">Обратная связь</string>
+    <string name="feedback.text">Хорошие отзывы можно отправлять на почту:</string>
+    <string name="feedback.email">bajiepkasmile@yandex.ru</string>
+
+    <!--Menu-->
+    <string name="menu.feedback">Обратная связь</string>
+    <string name="menu.about">О программе</string>
+    
+    <!--Notifications-->
+    <string name="notification.content.title">YandexApp</string>
+    <string name="notification.content.text">Время для музыки</string>
+    <string name="notification.title.yandex_music">Яндекс.Музыка</string>
+    <string name="notification.title.yandex_radio">Яндекс.Радио</string>
+
     <!--Messages-->
     <string name="message.updated">Обновлено</string>
     <string name="message.updating_failure">Ошибка при обновлении</string>
     <string name="message.no_network">Нет сети</string>
+    <string name="message.no_such_activity">Нет приложений, с помощью которых можно отправить отзыв</string>
 
     <!--Tools-->
     <string name="tools.name">Tove Lo</string>

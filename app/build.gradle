@@ -13,9 +13,25 @@ android {
         versionCode 1
         versionName "1.0"
     }
+
+    signingConfigs {
+        release {
+            keyAlias "AppKey"
+            keyPassword "secret information"
+            storePassword "secret information"
+            storeFile file("/Users/Valeriy/Desktop/Android Keystore.jks")
+        }
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+
     buildTypes {
         release {
-            minifyEnabled false
+            debuggable false
+            minifyEnabled true
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }

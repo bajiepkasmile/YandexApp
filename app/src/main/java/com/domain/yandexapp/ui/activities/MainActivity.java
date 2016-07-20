@@ -1,28 +1,34 @@
 package com.domain.yandexapp.ui.activities;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.domain.yandexapp.App;
 import com.domain.yandexapp.R;
 import com.domain.yandexapp.domain.interactors.LoadArtistsInteractor;
 import com.domain.yandexapp.domain.interactors.listeners.OnArtistsLoadListener;
+import com.domain.yandexapp.ui.fragments.AboutFragment;
 import com.domain.yandexapp.ui.fragments.ArtistDetailsFragment;
+import com.domain.yandexapp.ui.fragments.ArtistsListFragment;
+import com.domain.yandexapp.ui.fragments.FeedbackFragment;
 import com.domain.yandexapp.ui.interfaces.ArtistDetailsNavigator;
 import com.domain.yandexapp.ui.interfaces.ArtistsListNavigator;
-import com.domain.yandexapp.utils.AppConstants;
+import com.domain.yandexapp.domain.recievers.HeadsetReciever;
 
 import javax.inject.Inject;
 
 public class MainActivity extends AppCompatActivity
         implements OnArtistsLoadListener, ArtistsListNavigator, ArtistDetailsNavigator {
 
-    private static final int POSITION_UNSELECTED = -1;
-
-    private int position = POSITION_UNSELECTED;
+    HeadsetReciever reciever;
 
     @Inject
     LoadArtistsInteractor loadInteractor;
@@ -38,30 +44,51 @@ public class MainActivity extends AppCompatActivity
         } else {
             if (!loadInteractor.isRunning()) {
                 setContentView(R.layout.main);
-                position = savedInstanceState.getInt(AppConstants.ARG_POSITION);
             }
         }
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        outState.putInt(AppConstants.ARG_POSITION, position);
-        super.onSaveInstanceState(outState);
+    protected void onResume() {
+        super.onResume();
+        registerHeadsetReciever();
     }
 
     @Override
-    public void onBackPressed() {
-        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-            getSupportFragmentManager().popBackStack();
-        } else {
-            super.onBackPressed();
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(reciever);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == android.R.id.home) {
+            replaceFragment(R.id.fl_fragment_container, ArtistsListFragment.newInstance(), ArtistsListFragment.TAG);
+            return true;
+        } else if (id == R.id.menu_feedback) {
+            replaceFragment(R.id.fl_fragment_container, FeedbackFragment.newInstance(), FeedbackFragment.TAG);
+            return true;
+        } else if (id == R.id.menu_about) {
+            replaceFragment(R.id.fl_fragment_container, AboutFragment.newInstance(), AboutFragment.TAG);
+            return true;
         }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onArtistsLoadingFinished() {
-        loadInteractor.removeListener();setTheme(R.style.AppTheme_NoActionBar);
+        loadInteractor.removeListener();
         setContentView(R.layout.main);
+        replaceFragment(R.id.fl_fragment_container, ArtistsListFragment.newInstance(), ArtistsListFragment.TAG);
     }
 
     @Override
@@ -71,18 +98,20 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void navigateToArtistsList() {
-        getSupportFragmentManager().popBackStack();
+    public void navigateToArtistDetails(int position) {
+        replaceFragment(R.id.fl_fragment_container, ArtistDetailsFragment.newInstance(position), ArtistDetailsFragment.TAG);
     }
 
-    @Override
-    public void navigateToArtistDetails(int position) {
-        this.position = position;
-        ArtistDetailsFragment fragment = ArtistDetailsFragment.newInstance(position);
+    private void registerHeadsetReciever() {
+        reciever = new HeadsetReciever(getApplicationContext());
+        IntentFilter filter = new IntentFilter(Intent.ACTION_HEADSET_PLUG);
+        registerReceiver(reciever, filter);
+    }
+
+    private void replaceFragment(@IdRes int container, Fragment fragment, String tag) {
         getSupportFragmentManager()
                 .beginTransaction()
-                .add(android.R.id.content, fragment, ArtistDetailsFragment.TAG)
-                .addToBackStack(ArtistDetailsFragment.TAG)
+                .replace(container, fragment, tag)
                 .commit();
     }
 

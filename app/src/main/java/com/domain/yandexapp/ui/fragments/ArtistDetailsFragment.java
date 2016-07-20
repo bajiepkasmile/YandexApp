@@ -3,13 +3,9 @@ package com.domain.yandexapp.ui.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -20,8 +16,8 @@ import com.domain.yandexapp.R;
 import com.domain.yandexapp.model.Artist;
 import com.domain.yandexapp.mvp.presenters.ArtistDetailsMvpPresenter;
 import com.domain.yandexapp.mvp.views.ArtistDetailsMvpView;
+import com.domain.yandexapp.ui.activities.MainActivity;
 import com.domain.yandexapp.ui.interfaces.ArtistDetailsNavigator;
-import com.domain.yandexapp.utils.AppConstants;
 import com.domain.yandexapp.utils.Converter;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
@@ -31,8 +27,8 @@ import javax.inject.Inject;
 public class ArtistDetailsFragment extends Fragment implements ArtistDetailsMvpView {
 
     public static final String TAG = "ArtistDetailsFragment";
+    public static final String ARG_POSITION = "position";
 
-    private CollapsingToolbarLayout toolbarLayout;
     private ImageView ivCover;
     private TextView tvGenres;
     private TextView tvStatistics;
@@ -47,7 +43,7 @@ public class ArtistDetailsFragment extends Fragment implements ArtistDetailsMvpV
     public static ArtistDetailsFragment newInstance(int position) {
         ArtistDetailsFragment fragment = new ArtistDetailsFragment();
         Bundle args = new Bundle();
-        args.putInt(AppConstants.ARG_POSITION, position);
+        args.putInt(ARG_POSITION, position);
         fragment.setArguments(args);
         return fragment;
     }
@@ -97,16 +93,6 @@ public class ArtistDetailsFragment extends Fragment implements ArtistDetailsMvpV
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            mvpPresenter.onHomeButtonPressed();
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
     public void showArtistDetails(Artist artist) {
         Picasso.with(getActivity())
                 .load(artist.getBigCoverUrl())
@@ -114,7 +100,7 @@ public class ArtistDetailsFragment extends Fragment implements ArtistDetailsMvpV
                 .placeholder(R.drawable.cover_placeholder_big)
                 .into(ivCover);
 
-        toolbarLayout.setTitle(artist.getName());
+        getActivity().setTitle(artist.getName());
 
         if (artist.getGenres().length != 0) {
             tvGenres.setText(Converter.genresToString(artist.getGenres()));
@@ -140,22 +126,17 @@ public class ArtistDetailsFragment extends Fragment implements ArtistDetailsMvpV
         navigator.navigateToBrowser(link);
     }
 
-    @Override
-    public void navigateToArtistsList() {
-        navigator.navigateToArtistsList();
-    }
-
     private void initViews(View view) {
-        toolbarLayout = (CollapsingToolbarLayout) view.findViewById(R.id.toolbar_layout);
         ivCover = (ImageView) view.findViewById(R.id.iv_big_cover);
         tvGenres = (TextView) view.findViewById(R.id.tv_genres);
         tvStatistics = (TextView) view.findViewById(R.id.tv_statistics);
         tvLink = (TextView) view.findViewById(R.id.tv_link);
         tvDescription = (TextView) view.findViewById(R.id.tv_description);
 
-        setupToolbar(view);
-        setHasOptionsMenu(true);
-        displayHomeButton(view);
+        ActionBar actionBar = ((MainActivity) getActivity()).getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
         tvLink.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -165,20 +146,8 @@ public class ArtistDetailsFragment extends Fragment implements ArtistDetailsMvpV
         });
     }
 
-    private void setupToolbar(View view) {
-        Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
-        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-    }
-
-    private void displayHomeButton(View view) {
-        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
-    }
-
     private int getPosition() {
-        return getArguments().getInt(AppConstants.ARG_POSITION, 0);
+        return getArguments().getInt(ARG_POSITION, 0);
     }
 
 }
