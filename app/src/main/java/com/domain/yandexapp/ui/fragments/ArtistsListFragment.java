@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 
 import com.domain.yandexapp.App;
 import com.domain.yandexapp.R;
+import com.domain.yandexapp.ui.activities.MainActivity;
 import com.domain.yandexapp.utils.ToastManager;
 import com.domain.yandexapp.model.Artist;
 import com.domain.yandexapp.mvp.presenters.ArtistsListMvpPresenter;
@@ -150,6 +152,12 @@ public class ArtistsListFragment extends Fragment implements ArtistsListMvpView,
         rvArtistsList = (RecyclerView) view.findViewById(R.id.rv_artists_list);
         fab = (FloatingActionButton) view.findViewById(R.id.fab);
         updatingBar = (LinearLayout) view.findViewById(R.id.ll_updating_bar);
+
+        getActivity().setTitle(R.string.artists);
+        ActionBar actionBar = ((MainActivity) getActivity()).getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(false);
+        }
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
